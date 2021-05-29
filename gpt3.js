@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 const OpenAI = require('openai-api')
-const OPEN_AI_API_KEY = 'sk-VULQZ74n7xFx8csBp2l57vkp5svUB5U3qONMyCwU'
+const OPEN_AI_API_KEY = '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'
 const openai = new OpenAI(OPEN_AI_API_KEY)
 
 ;(async () => {
