@@ -4,7 +4,7 @@ request(
   {
     method: 'GET',
     // url: "https://www.techstars.com/accelerators/colliers-proptech",
-    url: 'https://www.nextgrid.ai/seed/',
+    url: 'https://snyk.io/advisor/npm-package/react',
   },
   (err, res, body) => {
     if (err) return console.error(err)
