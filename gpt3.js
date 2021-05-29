@@ -3,26 +3,28 @@ const OpenAI = require('openai-api')
 const OPEN_AI_API_KEY = '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'
 const openai = new OpenAI(OPEN_AI_API_KEY)
 
+
 ;(async () => {
   console.log('hello world, here comes the magic')
 
-  const gptResponse = await openai.complete({
-    engine: 'davinci',
-    prompt: 'this is a test',
-    maxTokens: 5,
-    temperature: 0.9,
-    topP: 1,
-    n: 1,
-    stream: false,
-    stop: ['\n', 'testing'],
-  })
+const gptResponse = await openai.answers({
+      "documents": ["myresponse.json"],
+      "question": "which puppy is happy?",
+      "search_model": "ada",
+      "model": "curie",
+      "examples_context": "In 2017, U.S. life expectancy was 78.6 years.",
+      "examples": [["What is human life expectancy in the United States?", "78 years."]],
+      "max_tokens": 5,
+      "stop": ["\n", "<|endoftext|>"],
+    });
+  
 
   console.log(gptResponse.data)
 })()
 ;(async () => {
-  const gptResponse = await openai.search({
+  const gptResponse = await openai({
     engine: 'davinci',
-    documents: ['White House', 'hospital', 'school'],
+    documents: ['myresponse.json'],
     query: 'the president',
   })
 
