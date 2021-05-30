@@ -18,6 +18,26 @@ URL_dep = URL + '#dependencies'
 r =requests.get(URL)
 r_dep =requests.get(URL_dep)
 
+def handle_answer(q):
+	try:
+		answer = openai.Answer.create(
+			search_model="davinci", 
+			model="davinci", 
+			question=q, 
+			file=file_id, 
+			examples_context="In 2017, U.S. life expectancy was 78.6 years.", 
+			examples=[["What is human life expectancy in the United States?", "78 years."]], 
+			max_rerank=200,
+			max_tokens=500,
+			stop=["\n", "<|endoftext|>"]
+		)
+			
+	except Exception as e:
+		answer = False
+	
+	return answer
+	
+
 if r.status_code == 200:
 
 	soup = bs(r.text, "html.parser")
@@ -79,23 +99,17 @@ if r.status_code == 200:
 	print("--------------------")
 	# QUESTION:
 	q = input("Question: ")
+
 	while q != 'exit':
 		# Get an answer
-		answer = openai.Answer.create(
-			search_model="davinci", 
-			model="davinci", 
-			question=q, 
-			file=file_id, 
-			examples_context="In 2017, U.S. life expectancy was 78.6 years.", 
-			examples=[["What is human life expectancy in the United States?", "78 years."]], 
-			max_rerank=200,
-			max_tokens=500,
-			stop=["\n", "<|endoftext|>"]
-		)
+		answer = handle_answer(q)
 		
 		if answer:
 			ans = "".join(answer['answers'])
 			print(f"A: {ans}")
+			q = input("Question: ")
+		else:
+			print("Couldn't find an answer.")
 			q = input("Question: ")
 else:
 	print("Package not found.")
