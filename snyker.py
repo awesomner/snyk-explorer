@@ -86,8 +86,7 @@ def handle_package(pkg_name):
 			for ele in dep_obj:
 				json.dump(ele, json_file)
 				json_file.write('\n')
-		print(data_set)
-		print(list_of_jsons)
+
 		# Send file to openAI
 		file = openai.File.create(file=open("data.jsonl"), purpose='answers')
 		time.sleep(3)
