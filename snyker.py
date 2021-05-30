@@ -41,6 +41,11 @@ if r.status_code == 200:
 		    text = ele.text.replace('\n', '')
 		    text = " ".join(text.split())
 		    data_set.append(text)
+	# Readme
+	for tag in soup.find('div', {'id': 'readme'}):
+		text = tag.text.replace('\n', '')
+		text = " ".join(text.split())
+		data_set.append(text)
 	# Dependencies
 	for tag in soup_dep.find_all('div', {'id': 'dependencies'}):
 		for ele in tag.find_all('a'):
