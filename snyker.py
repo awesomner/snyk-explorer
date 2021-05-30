@@ -3,6 +3,7 @@ import openai
 from bs4 import BeautifulSoup as bs
 import requests
 import config
+import time
 
 # Reading the API key from a file
 service_key = config.api_key
@@ -25,6 +26,11 @@ if r.status_code == 200:
 	# Parse the HTML for the data
 	data_set = []
 	dependencies = ['List of package dependencies']
+	
+	for tag in soup.find_all('div', class_='intro'):
+		for ele in tag.find_all('h2'):
+			msg = f"{pkg_name} is {ele.text}"
+			data_set.append(msg)
 	for tag in soup.find_all('div', class_='number'):
 		data_set.append(tag.text)
 	for tag in soup.find_all('ul', class_='scores'):
@@ -60,6 +66,7 @@ if r.status_code == 200:
 		    
 	# Send file to openAI
 	file = openai.File.create(file=open("data.jsonl"), purpose='answers')
+	time.sleep(3)
 	file_id = file['id']
 
 	print("--------------------")
@@ -68,22 +75,22 @@ if r.status_code == 200:
 	# QUESTION:
 	q = input("Question: ")
 	while q != 'exit':
-
 		# Get an answer
 		answer = openai.Answer.create(
-			search_model="ada", 
-			model="curie", 
+			search_model="davinci", 
+			model="davinci", 
 			question=q, 
 			file=file_id, 
 			examples_context="In 2017, U.S. life expectancy was 78.6 years.", 
 			examples=[["What is human life expectancy in the United States?", "78 years."]], 
-			max_rerank=10,
-			max_tokens=5,
+			max_rerank=200,
+			max_tokens=500,
 			stop=["\n", "<|endoftext|>"]
 		)
-
-		ans = "".join(answer['answers'])
-		print(f"A: {ans}")
-		q = input("Question: ")
+		
+		if answer:
+			ans = "".join(answer['answers'])
+			print(f"A: {ans}")
+			q = input("Question: ")
 else:
 	print("Package not found.")
