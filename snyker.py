@@ -109,6 +109,7 @@ while q != 'exit':
 	if q == 'pkg':
 		pkg_name = input("Enter package name: ")
 		file_id = handle_package(pkg_name)
+		q = input("Question: ")
 	# Get an answer
 	answer = handle_answer(q, file_id)
 	
